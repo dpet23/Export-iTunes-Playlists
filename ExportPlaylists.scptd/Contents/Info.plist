@@ -5,9 +5,13 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.apple.ScriptEditor.id.ExportPlaylists</string>
 	<key>CFBundleName</key>
-	<string>ExportPlaylists</string>
+	<string>Export Playlists for iTunes</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>Pre-release</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2018 Daniel Petrescu</string>
+	<key>OSAScriptingDefinition</key>
+	<string>Export Playlists for iTunes</string>
 	<key>WindowState</key>
 	<dict>
 		<key>bundleDividerCollapsed</key>
