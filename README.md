@@ -1,46 +1,47 @@
 # Export iTunes Playlists
-###### A script to export playlists from iTunes to a folder. Includes the song files and an m3u playlist file.
-###### Created to easily export playlists and media from iTunes to Android.
 
----
+A script to export playlists from iTunes to a folder. Includes the song files and an m3u playlist file.
 
-Links:
-* [This repository](https://github.com/dpet23/Export-iTunes-Playlists)
-* [Latest release](../../releases/latest)
+Created to easily export playlists and media from iTunes to Android.
+
+[![Download latest](https://img.shields.io/badge/link-this%20repo-blue.svg)](https://github.com/dpet23/Export-iTunes-Playlists)
+[![Download latest](https://img.shields.io/badge/download-latest-blue.svg)](https://github.com/dpet23/Export-iTunes-Playlists/releases/latest)
 
 ---
 
 **NOTE:**
 
-* This script will work only with iTunes on _Macintosh_ computers. It's written in AppleScript, a language built into the Mac operating system since Mac OS 7.
+* This script will work only with iTunes on OS X and macOS. It's written in AppleScript, a language built into the Mac operating system since Mac OS 7.
 
 * Tested with:
-  * macOS 10.11.6 - 10.13.2
-  * iTunes 12.4.3 - 12.7.2
+  * macOS 10.11.6 - 10.13.3
+  * iTunes 12.4.3 - 12.7.3
 
 ---
 
 ## How to use
 
-To run the script manually:
-1. Download the script or released app.
-1. For the app, unzip and double-click to open.
-1. For the script, either:
-    1. Double-click the downloaded file, and then choose `Script -> Run` from the Script Editor menu.
-    1. Or, from the Terminal, run
-```bash
-osascript ExportPlaylists.scptd
-```
+### The script
+1. Compile the script. This can be done in various ways:
+    * Use the Makefile; or
+    * Compile and export as an application from the Script Editor app
+1. Run the app.
 
-To integrate the script into iTunes:
-1. Download the script or released app.
-1. Open a new Finder window, and navigate to `/Users/[username]/Library/iTunes/Scripts/`.
-    1. Option-click the Finder's `Go` menu and select `Library`.
-    1. From the Library, open or create the folder `iTunes`.
-    1. Inside the iTunes folder, open or create the folder `Scripts`.
-1. Move the script file or app to `/Users/[username]/Library/iTunes/Scripts/`.
+### Integrate into iTunes
+1. Compile the script
+1. Move the app to `~/Library/iTunes/Scripts/`
+    * The `make deploy` command compiles the script and moves the app to the correct location.
 1. Open iTunes.
 1. The script can be run by opening iTunes's Script menu (scroll icon) and selecting the script's name.
+
+### Makefile
+| Rule | Description |
+| --- | --- |
+| `make` | Build an app, and save it to this directory |
+| `make deploy` | Build an app, and move it to `~/Library/iTunes/Scripts/` |
+| `make exportplaylists` | Build an app from the `ExportPlaylists` script |
+| `make clean` | Remove all apps from this directory |
+| `make clean-deploy` | Remove the app from `~/Library/iTunes/Scripts/` |
 
 ---
 
@@ -65,4 +66,4 @@ The options that can be set before exporting:
 
 iTunes already has an option to export a playlist. This creates a playlist file in several formats (`m3u`, `xml`, etc.), but doesn't export the actual media files, which can make it difficult to use the exported playlists on other devices.
 
-The script makes a copy of all media files in a playlist alongside the m3u file. However, m3u is the only format supported.
+The script makes a copy of all media files in a playlist alongside the `m3u` file. However, `m3u` is the only format supported.
