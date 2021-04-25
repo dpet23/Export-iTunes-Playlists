@@ -2,6 +2,9 @@
 Export Playlists for iTunes
 Written by Daniel Petrescu
 https://github.com/dpet23
+
+Modified by Jan P. Kohler 
+https://github.com/pk2061
 *)
 
 
@@ -51,7 +54,7 @@ set illegalCharacters1 to {"~", "?", "!", "@", "#", "$", "%", "&", "*", "=", "+"
 set illegalCharacters2 to {"'", "\"", ",", "`", "^", "˘"}
 
 with timeout of 60 * 60 * 24 seconds -- (timeout of 24 hours for many huge playlists, slow computer/network, etc.)
-	tell application "iTunes"
+	tell application "Music"
 		
 		-- No need to check if iTunes is open. The "tell application iTunes" command opens iTunes if it's closed.
 		
@@ -500,7 +503,16 @@ with timeout of 60 * 60 * 24 seconds -- (timeout of 24 hours for many huge playl
 							
 							-- ADD FILE TO PLAYLIST FILE
 							if (playlistFileType = "m3u") then
-								my write_playlist_file_m3u(thePlaylistFile, thisTrackDetails, ({cwd, newNameStr} as string))
+								
+								-- CHECK FOR RELATIVE PATH
+								if (true) then -- TODO: ADD option for relative path:
+									
+									set cwd to "./Music/"
+									my write_playlist_file_m3u(thePlaylistFile, thisTrackDetails, ({cwd, newNameStr} as string), true)
+								else
+									my write_playlist_file_m3u(thePlaylistFile, thisTrackDetails, ({cwd, newNameStr} as string), false)
+								end if
+								-- my write_playlist_file_m3u(thePlaylistFile, thisTrackDetails, ({cwd, newNameStr} as string))
 							end if
 							
 							-- LOG THE SUCCESSFUL COMPLETION
@@ -679,7 +691,7 @@ end arabic2roman
   @return List - the track's metadata
 *)
 on get_track_details(thisTrack)
-	tell application "iTunes"
+	tell application "Music"
 		
 		-- GET NAME/WORK
 		if (nameChoice = true) then
@@ -990,10 +1002,15 @@ end truncate_name
   @param List thisTrackDetails = the extracted metadata for this song
   @param Str newFilePath = path to song's new file after exporting
 *)
-on write_playlist_file_m3u(thePlaylistFile, thisTrackDetails, newFilePath)
+on write_playlist_file_m3u(thePlaylistFile, thisTrackDetails, newFilePath, relativePath)
 	tell application "Finder"
 		write ("#EXTINF:" & (item 4 of thisTrackDetails as string) & "," & (item 2 of thisTrackDetails as string) & " - " & (item 1 of thisTrackDetails as string) & return) to thePlaylistFile
-		write (POSIX path of newFilePath & return) to thePlaylistFile
+		
+		if (relativePath = true) then
+			write (newFilePath & return) to thePlaylistFile
+		else
+			write (POSIX path of newFilePath & return) to thePlaylistFile
+		end if -- write relative Path?
 	end tell
 end write_playlist_file_m3u
 
