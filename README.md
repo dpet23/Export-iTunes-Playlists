@@ -14,8 +14,8 @@ Created to easily export playlists and media from iTunes to Android.
 * This script will work only with iTunes on OS X and macOS. It's written in AppleScript, a language built into the Mac operating system since Mac OS 7.
 
 * Tested with:
-  * macOS 10.11.6 - 10.13.3
-  * iTunes 12.4.3 - 12.7.3
+  * macOS 11.2.3
+  * Music 1.1.3.3
 
 ---
 
@@ -27,9 +27,9 @@ Created to easily export playlists and media from iTunes to Android.
     * Compile and export as an application from the Script Editor app
 1. Run the app.
 
-### Integrate into iTunes
+### Integrate into Music
 1. Compile the script
-1. Move the app to `~/Library/iTunes/Scripts/`
+1. Move the app to `~/Library/Music/Scripts/`
     * The `make deploy` command compiles the script and moves the app to the correct location.
 1. Open iTunes.
 1. The script can be run by opening iTunes's Script menu (scroll icon) and selecting the script's name.
@@ -38,10 +38,10 @@ Created to easily export playlists and media from iTunes to Android.
 | Rule | Description |
 | --- | --- |
 | `make` | Build an app, and save it to this directory |
-| `make deploy` | Build an app, and move it to `~/Library/iTunes/Scripts/` |
+| `make deploy` | Build an app, and move it to `~/Library/Music/Scripts/` |
 | `make exportplaylists` | Build an app from the `ExportPlaylists` script |
 | `make clean` | Remove all apps from this directory |
-| `make clean-deploy` | Remove the app from `~/Library/iTunes/Scripts/` |
+| `make clean-deploy` | Remove the app from `~/Library/Music/Scripts/` |
 
 ---
 
