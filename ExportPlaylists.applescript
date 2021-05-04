@@ -22,6 +22,9 @@ global illegalCharacters1
 global illegalCharacters2
 global attrShow
 global folderChoice
+global musicFolder_DifferentFolder
+global musicFolder_SameFolder
+global playlistFolder_SameFolder
 global nameChoice
 global dupeLimit
 global playlistsExported
@@ -47,6 +50,11 @@ set ellipsisChar to "..." -- [character to use when truncating long names. Examp
 set playlistsExported to 0
 set songsExported to 0
 
+-- SET DEFAULT PATHS FOR THE EXPORTED FILES
+set musicFolder_DifferentFolder to "Music" -- [folder which contains the music files for the folderChoice / Saving mode "Different folders"]
+set musicFolder_SameFolder to "iTunes Export" -- [folder which contains the music for the folderChoice / Saving mode "Same folder"]
+set playlistFolder_SameFolder to "_playlists" -- [folder which contains the playlist files for the folderChoice / Saving mode "Same folder"]
+
 -- SET ILLEGAL CHARACTERS
 -- `illegalCharacters1`: will be converted to "_"
 -- `illegalCharacters2`: will be removed from name
@@ -54,7 +62,8 @@ set illegalCharacters1 to {"~", "?", "!", "@", "#", "$", "%", "&", "*", "=", "+"
 set illegalCharacters2 to {"'", "\"", ",", "`", "^", "˘"}
 
 with timeout of 60 * 60 * 24 seconds -- (timeout of 24 hours for many huge playlists, slow computer/network, etc.)
-	tell application "Music"
+
+	tell application "iTunes"
 		
 		-- No need to check if iTunes is open. The "tell application iTunes" command opens iTunes if it's closed.
 		
@@ -279,7 +288,7 @@ with timeout of 60 * 60 * 24 seconds -- (timeout of 24 hours for many huge playl
 		if (folderChoice = "Same folder") then
 			
 			-- MAKE ROOT FOLDER
-			set newName to "iTunes Export"
+			set newName to musicFolder_SameFolder -- defaultvalue "iTunes Export" 
 			set rootPathExists to my folder_exists(folderPathPOSIX, newName, "d")
 			if not rootPathExists then
 				set rootPath to my make_dir(folderPathPOSIX, newName)
@@ -288,7 +297,7 @@ with timeout of 60 * 60 * 24 seconds -- (timeout of 24 hours for many huge playl
 			end if
 			
 			-- MAKE PLAYLISTS FOLDER
-			set newName to "_Playlists"
+			set newName to  playlistFolder_SameFolder -- defaultvalue "_Playlists"
 			set playlistsPathExists to my folder_exists(rootPath, newName, "d")
 			if not playlistsPathExists then
 				set playlistsPath to my make_dir(rootPath, newName)
@@ -338,7 +347,7 @@ with timeout of 60 * 60 * 24 seconds -- (timeout of 24 hours for many huge playl
 					end if
 					
 					-- MAKE MUSIC FOLDER
-					set newName to "Music"
+					set newName to musicFolder_DifferentFolder -- defaultvalue "Music"
 					if not my folder_exists(playlistsPath, newName, "d") then
 						set musicPath to my make_dir(playlistsPath, newName)
 					else
@@ -505,14 +514,19 @@ with timeout of 60 * 60 * 24 seconds -- (timeout of 24 hours for many huge playl
 							if (playlistFileType = "m3u") then
 								
 								-- CHECK FOR RELATIVE PATH
-								if (true) then -- TODO: ADD option for relative path:
-									
-									set cwd to "./Music/"
+								if (true) then -- TODO: ADD option for relative path
+									-- CREATE RELATIVE FILE PATHS
+									-- The realative file paths in the playlist file are dependend on the folderChoice
+									if (folderChoice = "Same folder") 
+										set cwd to  "../"  -- music files are in a parent directory 
+									else if (folderChoice = "Different folders") then
+										set cwd to "./" & musicFolder_DifferentFolder & "/" -- music files are in a sub directory
+									end if -- folderchoice for relative paths
+
 									my write_playlist_file_m3u(thePlaylistFile, thisTrackDetails, ({cwd, newNameStr} as string), true)
 								else
 									my write_playlist_file_m3u(thePlaylistFile, thisTrackDetails, ({cwd, newNameStr} as string), false)
-								end if
-								-- my write_playlist_file_m3u(thePlaylistFile, thisTrackDetails, ({cwd, newNameStr} as string))
+								end if -- export to relative path
 							end if
 							
 							-- LOG THE SUCCESSFUL COMPLETION
@@ -691,7 +705,7 @@ end arabic2roman
   @return List - the track's metadata
 *)
 on get_track_details(thisTrack)
-	tell application "Music"
+	tell application "iTunes"
 		
 		-- GET NAME/WORK
 		if (nameChoice = true) then
@@ -1001,6 +1015,7 @@ end truncate_name
   @param File thePlaylistFile = reference to the file to use (must be currently open for writing)
   @param List thisTrackDetails = the extracted metadata for this song
   @param Str newFilePath = path to song's new file after exporting
+  @param Bool relativePath = use relative path in the m3u-File
 *)
 on write_playlist_file_m3u(thePlaylistFile, thisTrackDetails, newFilePath, relativePath)
 	tell application "Finder"
