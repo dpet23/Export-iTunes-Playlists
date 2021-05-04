@@ -3,7 +3,7 @@ Export Playlists for iTunes
 Written by Daniel Petrescu
 https://github.com/dpet23
 
-Modified by Jan P. Kohler 
+Modified by Jan P. Koehler 
 https://github.com/pk2061
 *)
 
