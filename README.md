@@ -14,8 +14,8 @@ Created to easily export playlists and media from iTunes to Android.
 * This script will work only with iTunes on OS X and macOS. It's written in AppleScript, a language built into the Mac operating system since Mac OS 7.
 
 * Tested with:
-  * macOS 10.11.6 - 10.13.3
-  * iTunes 12.4.3 - 12.7.3
+  * macOS 10.11.6 - 10.14.6
+  * iTunes 12.4.3 - 12.9.5.5
 
 ---
 
