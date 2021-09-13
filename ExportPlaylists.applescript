@@ -59,41 +59,50 @@ with timeout of 60 * 60 * 24 seconds -- (timeout of 24 hours for many huge playl
 		set originalDelimiter to AppleScript's text item delimiters
 		
 		-- GET ALL PLAYLISTS FROM ITUNES
+		set delim to "--------------------------------------------------"
+		set delim_specialpl to "---------------- Special Playlists: ----------------"
+		set delim_userpl to "------------------ User Playlists: -----------------"
+		set delim_smartpl to "---------------- Smart Playlists: -----------------"
+		set all_ps to {}
 		try
 			set all_specialps to (get name of every user playlist whose special kind is not none)
-			set all_userps to (get name of every user playlist whose smart is false and special kind is none)
-			set all_smartps to (get name of every user playlist whose smart is true and special kind is none)
-			
-			set delim to "--------------------------------------------------"
-			set delim_specialpl to "---------------- Special Playlists: ----------------"
-			set delim_userpl to "------------------ User Playlists: -----------------"
-			set delim_smartpl to "---------------- Smart Playlists: -----------------"
-			set all_ps to {}
-			if ((length of all_specialps) > 0) then
-				set the end of all_ps to delim
-				set the end of all_ps to delim_specialpl
-				repeat with ps in all_specialps
-					set the end of all_ps to ps
-				end repeat
-			end if
-			if ((length of all_userps) > 0) then
-				set the end of all_ps to delim
-				set the end of all_ps to delim_userpl
-				repeat with ps in all_userps
-					set the end of all_ps to ps
-				end repeat
-			end if
-			if ((length of all_smartps) > 0) then
-				set the end of all_ps to delim
-				set the end of all_ps to delim_smartpl
-				repeat with ps in all_smartps
-					set the end of all_ps to ps
-				end repeat
-			end if
+		on error number -1728 ------ No special playlists exist
+			set all_smartps to {}
 		end try
+		if ((length of all_specialps) > 0) then
+			set the end of all_ps to delim
+			set the end of all_ps to delim_specialpl
+			repeat with ps in all_specialps
+				set the end of all_ps to ps
+			end repeat
+		end if
+		try
+			set all_userps to (get name of every user playlist whose smart is false and special kind is none)
+		on error number -1728 ------ No user playlists exist
+			set all_smartps to {}
+		end try
+		if ((length of all_userps) > 0) then
+			set the end of all_ps to delim
+			set the end of all_ps to delim_userpl
+			repeat with ps in all_userps
+				set the end of all_ps to ps
+			end repeat
+		end if
+		try
+			set all_smartps to (get name of every user playlist whose smart is true and special kind is none)
+		on error number -1728 ------ No smart playlists exist
+			set all_smartps to {}
+		end try
+		if ((length of all_smartps) > 0) then
+			set the end of all_ps to delim
+			set the end of all_ps to delim_smartpl
+			repeat with ps in all_smartps
+				set the end of all_ps to ps
+			end repeat
+		end if
 		
 		-- CHOOSE PLAYLISTS TO EXPORT
-		set thePlaylistsNames to (choose from list all_ps with prompt ({"Choose which playlists to export.", return, "[can choose multiple out of ", (length of all_specialps as string), " special playlists, ", (length of all_userps as string), " user playlists, and ", (length of delim_smartpl as string), " smart playlists]"} as string) with title myTitle with multiple selections allowed)
+		set thePlaylistsNames to (choose from list all_ps with prompt ({"Choose which playlists to export.", return, "[can choose multiple out of ", (length of all_specialps as string), " special playlists, ", (length of all_userps as string), " user playlists, and ", (length of all_smartps as string), " smart playlists]"} as string) with title myTitle with multiple selections allowed)
 		if thePlaylistsNames is false then return
 		set thePlaylistsNumber to (count of thePlaylistsNames)
 		set thePlaylistsNumberInvalid to my count_matches(thePlaylistsNames, "---------------")
