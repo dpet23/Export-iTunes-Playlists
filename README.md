@@ -1,6 +1,6 @@
-# Export iTunes Playlists
+# Export iTunes / Music Playlists
 
-A script to export playlists from iTunes to a folder. Includes the song files and an m3u playlist file.
+A script to export playlists from iTunes or Music to a folder. Includes the song files and an m3u playlist file.
 
 Created to easily export playlists and media from iTunes to Android.
 
@@ -11,11 +11,14 @@ Created to easily export playlists and media from iTunes to Android.
 
 **NOTE:**
 
-* This script will work only with iTunes on OS X and macOS. It's written in AppleScript, a language built into the Mac operating system since Mac OS 7.
+* This script will work only with iTunes / Music on OS X and macOS. It's written in AppleScript, a language built into the Mac operating system since Mac OS 7.
 
 * Tested with:
   * macOS 10.11.6 - 10.14.6
   * iTunes 12.4.3 - 12.9.5.5
+
+  * macOS 11.2.3
+  * Music 1.1.3.3
 
 ---
 
@@ -30,18 +33,26 @@ Created to easily export playlists and media from iTunes to Android.
 ### Integrate into iTunes
 1. Compile the script
 1. Move the app to `~/Library/iTunes/Scripts/`
-    * The `make deploy` command compiles the script and moves the app to the correct location.
+    * The `make deploy-itunes` command compiles the script and moves the app to the correct location.
 1. Open iTunes.
 1. The script can be run by opening iTunes's Script menu (scroll icon) and selecting the script's name.
+
+### Integrate into Music
+1. Compile the script
+1. Move the app to `~/Library/Music/Scripts/`
+    * The `make deploy-music` command compiles the script and moves the app to the correct location.
+1. Open Music.
+1. The script can be run by opening Music's Script menu (scroll icon) and selecting the script's name.
 
 ### Makefile
 | Rule | Description |
 | --- | --- |
 | `make` | Build an app, and save it to this directory |
-| `make deploy` | Build an app, and move it to `~/Library/iTunes/Scripts/` |
+| `make deploy-itunes` | Build an app, and move it to `~/Library/iTunes/Scripts/` |
+| `make deploy-music` | Build an app, and move it to `~/Library/Music/Scripts/` |
 | `make exportplaylists` | Build an app from the `ExportPlaylists` script |
 | `make clean` | Remove all apps from this directory |
-| `make clean-deploy` | Remove the app from `~/Library/iTunes/Scripts/` |
+| `make clean-deploy` | Remove the app from `~/Library/Music/Scripts/` and/or `~/Library/iTunes/Scripts/` |
 
 ---
 
